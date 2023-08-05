@@ -1,8 +1,9 @@
 package com.example.nasadailyimage;
 
+import java.io.Serializable;
 import java.sql.Blob;
 
-public class Archive {
+public class Archive implements Serializable {
     private String name;
     private String date;
     private String hdurl;

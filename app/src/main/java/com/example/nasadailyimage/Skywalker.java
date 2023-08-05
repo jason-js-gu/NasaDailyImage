@@ -1,61 +1,49 @@
 package com.example.nasadailyimage;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
-
-public class HomeFragment extends Fragment {
+import android.graphics.Matrix;
+/**
+ * @author Jinsheng Gu
+ */
+public class Skywalker extends Welcome {
     String chosenDate = "";
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
-    }
-    @Override
-    public void onViewCreated(View view, @Nullable
-                             Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        handleCommonComponents();
 
-        TextView tvChooseDate = getView().findViewById(R.id.tvchoose);
-        TextView tvDate = getView().findViewById(R.id.tvDate);
+        TextView tvChooseDate = findViewById(R.id.tvchoose);
+        TextView tvDate = findViewById(R.id.tvDate);
         //add event listner to textview to choose date
-
-
         tvChooseDate.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
 
@@ -64,18 +52,44 @@ public class HomeFragment extends Fragment {
             int day = c.get(Calendar.DAY_OF_MONTH);
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    this.getContext(),
+                    this,
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
                             chosenDate = year + "-" + (monthOfYear+1) + "-" + dayOfMonth;
                             tvDate.setText("Date chosen:\n" + chosenDate);
-                            StringBuilder sb = new StringBuilder();
-                            sb.append("https://api.nasa.gov/planetary/apod?api_key=");
-                            sb.append("Q4KdW6HDALQTwRQvMULi43VLAi3fxSexhyJRViAY&date=");
-                            sb.append(chosenDate);
-                            new NasaInfo().execute(sb.toString());
+
+                            // hide visible components generated from previous searches
+                            TextView tvUrl = findViewById(R.id.tvUrl);
+                            tvUrl.setText("");
+                            Button btnLink = findViewById(R.id.btnLink);
+                            btnLink.setVisibility(View.INVISIBLE);
+                            Button btnSave = findViewById(R.id.btnSave);
+                            btnSave.setVisibility(View.INVISIBLE);
+
+                            // check the chosen date
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            try {
+                                Date cDate = sdf.parse(chosenDate);
+                                if(cDate.after(new Date())){
+                                    //toast
+                                    Toast.makeText(Skywalker.this,"You can not choose a date after today!",Toast.LENGTH_LONG).show();
+                                }else {
+                                    // build url dynamically
+                                    StringBuilder sb = new StringBuilder();
+                                    sb.append("https://api.nasa.gov/planetary/apod?api_key=");
+                                    sb.append("Q4KdW6HDALQTwRQvMULi43VLAi3fxSexhyJRViAY&date=");
+                                    sb.append(chosenDate);
+                                    // execute async request to NASA api
+                                    new NasaInfo().execute(sb.toString());
+                                }
+
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+
                         }
                     },
                     year, month, day
@@ -84,6 +98,9 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * class to execute async task
+     */
     public class NasaInfo extends AsyncTask<String, Integer, String> {
         byte[] image = null;
         String hdurl = "";
@@ -93,6 +110,14 @@ public class HomeFragment extends Fragment {
         protected String doInBackground(String... url) {
             String requestUrl = url[0];
             StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 100; i++) {
+                try {
+                    publishProgress(i);
+                    Thread.sleep(30);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             try {
                 URL hUrl = new URL(requestUrl);
                 final URLConnection urlConnection = hUrl.openConnection();
@@ -124,21 +149,25 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void onProgressUpdate(Integer... integers) {
-
+            //activate progressbar
+            ProgressBar progressBar = findViewById(R.id.progressBar);
+            progressBar.setProgress(integers[0]);
         }
 
         @Override
         protected void onPostExecute(String result) {
-            TextView tvUrl = getActivity().findViewById(R.id.tvUrl);
-            TextView tvLink = getActivity().findViewById(R.id.tvLink);
-            TextView tvSave = getActivity().findViewById(R.id.tvSave);
-            tvUrl.setText(hdurl);
-            tvLink.setText("Click to view the photo");
-            tvSave.setText("Click to save the photo into archive");
+            TextView tvUrl = findViewById(R.id.tvUrl);
+            tvUrl.setText("Universe Found:\n" + hdurl);
 
-            MyDbHelper myDbHelper = MyDbHelper.getInstance(getContext());
+            Button btnLink = findViewById(R.id.btnLink);
+            btnLink.setText("Enjoy your universe");
+            btnLink.setVisibility(View.VISIBLE);
 
-            tvLink.setOnClickListener((click) -> {
+            Button btnSave = findViewById(R.id.btnSave);
+            btnSave.setText("save your universe into archive");
+            btnSave.setVisibility(View.VISIBLE);
+
+            btnLink.setOnClickListener((click) -> {
                 try {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(hdurl));
                     startActivity(intent);
@@ -147,24 +176,24 @@ public class HomeFragment extends Fragment {
                 }
             });
 
-            tvSave.setOnClickListener((click) -> {
+            MyDbHelper myDbHelper = MyDbHelper.getInstance(Skywalker.this);
+
+            btnSave.setOnClickListener((click) -> {
                 Archive archive = new Archive(title, chosenDate, hdurl, image);
                 myDbHelper.addArchive(archive);
-
-                ArchiveFragment archiveFragment = new ArchiveFragment();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, archiveFragment).commit();
-
-//                Fragment fragment = new HomeFragment();
-//                FragmentManager fm = getChildFragmentManager();
-//                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-//                fragmentTransaction.replace(R.id.archiveLayout, fragment);
-//                fragmentTransaction.commit();
+                Intent intent = new Intent(Skywalker.this, MyArchive.class);
+                startActivity(intent);
             });
-
-
         }
 
-
+        /**
+         *
+         * @param url
+         * @param title
+         * @return
+         * @throws JSONException
+         * @throws MalformedURLException
+         */
         private byte[] handleImage(String url, String title) throws JSONException, MalformedURLException {
             //get url of a cat image
             Bitmap bitmap;
@@ -173,9 +202,10 @@ public class HomeFragment extends Fragment {
                 //get image from target url
                 inputStream = new URL(url).openStream();
                 bitmap = BitmapFactory.decodeStream(inputStream);
+                Bitmap new_bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2,bitmap.getHeight()/2, false);
                 //save image to local storage
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
+                new_bitmap.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
                 outputStream.flush();
                 outputStream.close();
                 return outputStream.toByteArray();
@@ -187,7 +217,3 @@ public class HomeFragment extends Fragment {
         }
     }
 }
-
-
-    //Q4KdW6HDALQTwRQvMULi43VLAi3fxSexhyJRViAY
-

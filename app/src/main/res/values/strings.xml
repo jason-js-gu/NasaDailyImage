@@ -1,5 +1,53 @@
 <resources>
     <string name="app_name">NasaDailyImage</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="help">Help</string>
+    <string name="version">Version 1.0</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="menu_item_home">Home</string>
+    <string name="menu_item_skywalker">Skywalker</string>
+    <string name="menu_item_archive">Archive</string>
+    <string name="menu_item_about">About</string>
+    <string name="alert_title">User Guide</string>
+    <string name="welcome_activity_name">Welcome</string>
+    <string name="skywalker_activity_name">Skywalker</string>
+    <string name="archive_activity_name">MyArchive</string>
+    <string name="about_activity_name">About</string>
+    <string name="welcome_activity_help">
+        1) You can enter your name in the input field; \n\n
+        2) If you choose \"Remember me\", your will not need to input again your name later; \n\n
+        3) You can cancel your choice of remembering your name by clicking \"Undo\" button in the snackbar or vice versa; \n\n
+        4) Click on the toggle bar on the left corner, you will see a navigation bar and click on the option to jump to the target page.
+    </string>
+    <string name="skywalker_activity_help">
+        1) Click on \"Choose a Date\" to select a date from the calendar; \n\n
+        2) If you choose a date after today, your will see a message appearing at the bottom of the page; \n\n
+        3) Otherwise the app begins to retrieve information from NASA api; \n\n
+        4) You will see a progress bar on the page indicating the processing rate; \n\n
+        5) Click on \"ENJOY YOUR UNIVERSE\", the app will jump to the browser; \n\n
+        6) Click on \"SAVE YOUR UNIVERSE INTO ARCHIVE\" to save the photo for later reviewing.
+    </string>
+    <string name="archive_activity_help">
+        1) Click on the item, you will see the key information of the photo; \n\n
+        2) If you long click on the item, it will be deleted.
+    </string>
+    <string name="about_activity_help">
+        Nothing special on this page. \n\nThank you!
+    </string>
+    <string name="welcome">Welcome</string>
+    <string name="start_button">Dive into UNIVERSE</string>
+    <string name="snackbar_message_on">Your name will be saved for greeting next time.</string>
+    <string name="snackbar_message_off">Your name will not be saved for greeting.</string>
+    <string name="undo">Undo</string>
+    <string name="choose_date">Choose a date, \nI\'ll give you a universe.</string>
+    <string name="choose_date_hint">Click Me to Choose</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="txt_about">
+        \nThis project is a study project in partial fulfillment of the requirements for CST2335. \n\n\n
+        Submitted by: \n Jinsheng Gu \n\n\n
+        Submitted to: \n Professor Jesus Federico \n\n\n
+        Computer Programming \n\n
+        Algonquin College \n
+    </string>
 </resources>

@@ -3,12 +3,7 @@ package com.example.nasadailyimage;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,22 +15,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArchiveFragment extends Fragment {
+public class MyArchive extends Welcome {
     List<Archive> photos = new ArrayList<>();
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_archive, container, false);
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_archive);
 
-    @Override
-    public void onViewCreated(View view, @Nullable
-    Bundle savedInstanceState) {
-        ListView listView = view.findViewById(R.id.archiveLayout);
+        handleCommonComponents();
+
+        ListView listView = findViewById(R.id.lv_archive);
         //retrieve photos from database
-        MyDbHelper myDbHelper = MyDbHelper.getInstance(getContext());
+        MyDbHelper myDbHelper = MyDbHelper.getInstance(this);
         photos = myDbHelper.getAllPhotos();
         //System.out.println("num-photos:"+photos.size());
         //set list adapter
@@ -46,7 +37,8 @@ public class ArchiveFragment extends Fragment {
         //set click listner to open the photo in the browser
         listView.setOnItemClickListener((p,b,position,id)->{
             Archive archive = (Archive) listAdapter.getItem(position);
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(archive.getHdurl()));
+            Intent intent = new Intent(MyArchive.this, PhotoInfo.class);
+            intent.putExtra("archive", archive);
             startActivity(intent);
         });
 
@@ -60,7 +52,7 @@ public class ArchiveFragment extends Fragment {
         });
     }
 
-    private class ListAdapter extends BaseAdapter{
+    public class ListAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -89,10 +81,9 @@ public class ArchiveFragment extends Fragment {
             imageView.setImageBitmap(bmp);
             TextView tvTitle = view.findViewById(R.id.tvTitle);
             TextView tvDate = view.findViewById(R.id.tvDate);
-            tvTitle.setText("Title:\n" + archive.getName());
-            tvDate.setText("Date:\n" + archive.getDate());
+            tvTitle.setText(archive.getName());
+            tvDate.setText("Date:" + archive.getDate());
             return view;
         }
     }
-
 }

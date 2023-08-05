@@ -11,7 +11,7 @@ import java.util.List;
 
 public class MyDbHelper extends SQLiteOpenHelper {
     protected static final String DBNAME = "mydb.db";
-    protected static final int VERSION = 1;
+    protected static final int VERSION = 2;
     public static final String ID = "id";
     public static final String TABLE_NAME = "nasaimgs";
     public static final String NAME = "name";
@@ -35,7 +35,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String queryTable = "CREATE TABLE " + TABLE_NAME + "(" +
-                ID + " INTEGER PRIMARY KEY," +
+                ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 NAME + " TEXT NOT NULL, " +
                 DATE + " TEXT NOT NULL, " +
                 HDURL + " TEXT NOT NULL, " +
@@ -45,7 +45,9 @@ public class MyDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
     }
 
     public void addArchive(Archive archive){

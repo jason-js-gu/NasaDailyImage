@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NasaDailyImage</string>
+    <string name="help">Aider</string>
+    <string name="version">Version 1.0</string>
+    <string name="open">Ouvrir</string>
+    <string name="close">Fermer</string>
+    <string name="menu_item_home">Accueil</string>
+    <string name="menu_item_skywalker">Skywalker</string>
+    <string name="menu_item_archive">Archive</string>
+    <string name="menu_item_about">à propos</string>
+    <string name="alert_title">Guide D\'usager</string>
+    <string name="welcome_activity_name">WelcomeActivity</string>
+    <string name="skywalker_activity_name">SkywalkerActivity</string>
+    <string name="archive_activity_name">ArchiveActivity</string>
+    <string name="about_activity_name">AboutActivity</string>
+    <string name="welcome_activity_help">
+        1) Vous pouvez saisir votre nom dans le champ de saisie; \n
+        2) Si vous choisissez \"Se souvenir de moi\", vous n\'entrerez pas votre nom plus tard; \n
+        3) Vous pouvez annuler votre choix de mémoriser votre nom ou contre Versace en cliquant sur le bouton \ "Annuler" dans la barre de collations.
+        4) Cliquez sur la barre de basculement dans le coin gauche, vous verrez une barre de navigation et cliquez sur l\'option pour accéder à la page cible.
+    </string>
+
+    <string name="skywalker_activity_help">
+        1) Cliquez sur \"Choisir une date\" pour sélectionner une date dans le calendrier; \n\n
+         2) Si vous choisissez une date après aujourd\'hui, vous verrez un message apparaître en bas de la page ; \n\n
+         3) Sinon, l\'application commence à récupérer des informations à partir de l\'API de la NASA; \n\n
+         4) Vous verrez une barre de progression sur la page indiquant le taux de traitement; \n\n
+         5) Cliquez sur \"Cliquez pour afficher la photo dans le navigateur\", l\'application passera au navigateur; \n\n
+         6) Cliquez sur \"Cliquez pour enregistrer la photo dans l\'archive\" pour enregistrer la photo pour une révision ultérieure.
+    </string>
+    <string name="archive_activity_help">
+        1) Cliquez sur l\'élément, vous verrez les informations clés de la photo ; \n\n
+        2) Si vous cliquez longtemps sur l\'élément, il sera supprimé.
+    </string>
+    <string name="about_activity_help">
+        Rien de spécial sur cette page. \n\nMerci!
+    </string>
+    <string name="welcome">Bienvenue</string>
+    <string name="start_button">Sauter dans l\'UNIVERSE</string>
+    <string name="snackbar_message_on">Votre nom sera enregistré pour l\'accueil la prochaine fois.</string>
+    <string name="snackbar_message_off">Votre nom ne sera pas enregistré pour l\'accueil.</string>
+    <string name="undo">Annuler</string>
+    <string name="choose_date">Choisissez une date, je vous proposerai un univers.</string>
+    <string name="choose_date_hint">Cliquez-ici pour choisir</string>
+    <string name="txt_about">
+        Ce projet est un projet d\'étude répondant partiellement aux exigences du CST2335. \n\n
+        Envoyé par: \n Jinsheng Gu \n\n
+        Soumis à: \n Professor Jesus Federico \n\n
+        Algonquin College \n
+    </string>
+</resources>
